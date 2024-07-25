@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import bcrypt from "bcrypt";
 const userSchema =  new mongoose.Schema({
     username: {
         type: String,
@@ -42,4 +42,23 @@ const userSchema =  new mongoose.Schema({
     }
 },{timestamps: true})
 
-export const user = mongoose.model("user",userSchema)
+userSchema.pre("save", async function(next){
+   if(!this.isModified("password")) return next();
+   this.password = await bcrypt.hash(password, 10);
+   next();
+})
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+    return await bcrypt.compare(password, this.password)
+}
+
+// userSchema.methods.generateAccessToken = function {
+//     return (jwt.sign(
+//         {},
+//         {},
+//         {}
+//     ))
+// }
+
+
+export const User = mongoose.model("User",userSchema)
