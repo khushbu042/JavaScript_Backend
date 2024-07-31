@@ -8,7 +8,8 @@ import {
     getCurrentUser,
     updateUserAvatar,
     getUserChannelProfile,
-    updateUserCoverImage
+    updateUserCoverImage,
+    getWatchHistory
 } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { jwtVerify } from "../middlewares/auth.middleware.js";
@@ -35,7 +36,8 @@ userRouter.route('/change-password').post(jwtVerify,changeCurrentPassword)
 userRouter.route('/current-user').get(jwtVerify, getCurrentUser)
 userRouter.route('/avatar').patch(jwtVerify, upload.single("avatar"), updateUserAvatar)
 userRouter.route('/cover-image').patch(jwtVerify, upload.single("coverImage"),  updateUserCoverImage)
-userRouter.route('/c:/username').get(jwtVerify,getUserChannelProfile)
+userRouter.route('/c/:username').get(jwtVerify,getUserChannelProfile)
+userRouter.route('/history').get(jwtVerify,getWatchHistory)
 
 
 export {userRouter}
